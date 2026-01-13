@@ -18,4 +18,6 @@ export const dialogueData = {
   library: `There are a lot of programming books on my shelves. There is even one in Arabic (I also speak Arabic btw).`,
   
   exit: `If you want to exit Shawa's portfolio, just close the tab.`,
+
+  door: `This is the exit door. Click it to leave my portfolio. Thank you for visiting!`,
 };
