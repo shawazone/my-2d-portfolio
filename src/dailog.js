@@ -17,7 +17,18 @@ export const dialogueData = {
 
   library: `There are a lot of programming books on my shelves. There is even one in Arabic (I also speak Arabic btw).`,
   
-  exit: `If you want to exit Shawa's portfolio, just close the tab.`,
 
   door: `This is the exit door. Click it to leave my portfolio. Thank you for visiting!`,
+
+  greetingNpc: `Hey there! Welcome to  Shawa's Portfolio. Feel free to explore and interact with the objects to learn more about him and his work!`,
+
+  farm: `I love farming and animals!`,
+
+  well: `Beware not to fall in!`,
+
+  camping : `I love camping during all seasons!`,
+
+  fire: `A warm fire is always comforting!`,
+
+  spawnpoints: `Hello! , Welcome to my portfolio!`,
 };

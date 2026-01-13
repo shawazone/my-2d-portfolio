@@ -16,14 +16,14 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
 });
 
 // Load both maps
-k.loadSprite("outdoor", "./outdoor.png");
+k.loadSprite("outdoor", "./outdoor1.png");
 k.loadSprite("indoor", "./map.png");
 
 k.setBackground(k.Color.fromHex("#000000"));
 
 // OUTDOOR SCENE
 k.scene("outdoor", async () => {
-  const mapData = await (await fetch("./outdoor.json")).json();
+  const mapData = await (await fetch("./outdoor1.json")).json();
   const layers = mapData.layers;
 
   const map = k.add([k.sprite("outdoor"), k.pos(0), k.scale(scaleFactor)]);
@@ -65,6 +65,7 @@ k.scene("outdoor", async () => {
           if (boundary.name === "door" || boundary.name === "exit") {
             player.onCollide(boundary.name, () => {
             if (boundary.name === "door" || boundary.name === "exit") {
+              
               k.go("indoor"); // or "outdoor" depending on the scene
             }
           });
@@ -72,7 +73,7 @@ k.scene("outdoor", async () => {
             // Regular boundaries
             player.onCollide(boundary.name, () => {
 
-            if (boundary.name !== "wall") {
+            if (boundary.name !== "wall" && boundary.name !== "exit" ) {
               displayDialogue(
                 dialogueData[boundary.name],
                 () => (player.isInDialogue = false)
@@ -102,7 +103,7 @@ k.scene("outdoor", async () => {
     );
   } else {
     // Default spawn if no spawn point found
-    player.pos = k.vec2(270 * scaleFactor, 290 * scaleFactor);
+    player.pos = k.vec2(268 * scaleFactor, 280 * scaleFactor);
   }
 
   // Add player to scene
@@ -281,18 +282,10 @@ k.scene("indoor", async () => {
           // Check if this is a door boundary to go back outside
           if (boundary.name === "door" || boundary.name === "exit") {
             player.onCollide(boundary.name, () => {
-              player.isInDialogue = true;
-              displayDialogue(
-                "Go outside?",
-                () => {
-                  player.isInDialogue = false;
-                  // Switch to outdoor map
+         
                   k.go("outdoor");
-                },
-                () => {
-                  player.isInDialogue = false;
-                }
-              );
+                  
+                  
             });
           } else {
             // Regular boundaries
