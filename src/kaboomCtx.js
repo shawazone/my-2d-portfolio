@@ -8,3 +8,9 @@ export const k = kaboom({
   canvas: document.getElementById("game"),
   debug: false, // set to false once ready for production
 });
+
+
+// Add audio configuration
+// k.loadSound("bg-music", "./assets/background.mp3");
+// k.loadSound("footsteps", "./assets/footsteps.mp3");
+
