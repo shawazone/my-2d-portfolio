@@ -155,7 +155,7 @@ k.scene("outdoor", async () => {
       (map.pos.y + playerSpawnPoint.y) * scaleFactor
     );
   } else {
-    player.pos = k.vec2(268 * scaleFactor, 280 * scaleFactor);
+    player.pos = k.vec2(269 * scaleFactor, 280 * scaleFactor);
   }
 
   // Add player to scene
