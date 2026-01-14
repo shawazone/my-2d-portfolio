@@ -2,6 +2,10 @@ import { dialogueData, scaleFactor } from "./dailog";
 import { k } from "./kaboomCtx";
 import { displayDialogue, setCamScale } from "./utils";
 
+// Load audio files
+k.loadSound("bg-music", "./background.mp3");
+k.loadSound("footsteps", "./footsteps1.mp3");
+
 k.loadSprite("spritesheet", "./spritesheet.png", {
   sliceX: 39,
   sliceY: 31,
@@ -20,6 +24,55 @@ k.loadSprite("outdoor", "./outdoor1.png");
 k.loadSprite("indoor", "./map.png");
 
 k.setBackground(k.Color.fromHex("#000000"));
+
+// Simple audio state management
+const audioState = {
+  bgMusicPlaying: true,
+  bgMusicLoop: null,
+  footstepLoop: null,
+  lastFootstepTime: 0,
+};
+
+function playBackgroundMusic() {
+  if (audioState.bgMusicLoop) {
+    audioState.bgMusicLoop.stop();
+  }
+  
+  audioState.bgMusicLoop = k.play("bg-music", {
+    volume: 0.3,
+    loop: true,
+  });
+  audioState.bgMusicPlaying = true;
+}
+
+function stopBackgroundMusic() {
+  if (audioState.bgMusicLoop) {
+    audioState.bgMusicLoop.stop();
+    audioState.bgMusicLoop = null;
+  }
+  audioState.bgMusicPlaying = false;
+}
+
+function startFootsteps() {
+  // Clear any existing footstep loop
+  stopFootsteps();
+  
+  // Play footstep sound at walking rhythm (every 0.35 seconds)
+  audioState.footstepLoop = k.loop(0.35, () => {
+    k.play("footsteps", {
+      volume: 0.15,
+      speed: 1.2,
+      detune: k.rand(-100, 100),
+    });
+  });
+}
+
+function stopFootsteps() {
+  if (audioState.footstepLoop) {
+    audioState.footstepLoop.cancel();
+    audioState.footstepLoop = null;
+  }
+}
 
 // OUTDOOR SCENE
 k.scene("outdoor", async () => {
@@ -41,6 +94,7 @@ k.scene("outdoor", async () => {
       speed: 250,
       direction: "down",
       isInDialogue: false,
+      isMoving: false,
     },
     "player",
   ]);
@@ -61,28 +115,27 @@ k.scene("outdoor", async () => {
         ]);
 
         if (boundary.name) {
-          // Check if this is a door boundary
           if (boundary.name === "door" || boundary.name === "exit") {
             player.onCollide(boundary.name, () => {
-            if (boundary.name === "door" || boundary.name === "exit") {
-              
-              k.go("indoor"); // or "outdoor" depending on the scene
-            }
-          });
-                    } else {
-            // Regular boundaries
+              if (boundary.name === "door" || boundary.name === "exit") {
+                stopFootsteps();
+                k.go("indoor");
+              }
+            });
+          } else {
             player.onCollide(boundary.name, () => {
-
-            if (boundary.name !== "wall" && boundary.name !== "exit" ) {
-              displayDialogue(
-                dialogueData[boundary.name],
-                () => (player.isInDialogue = false)
-              );}
+              if (boundary.name !== "wall" && boundary.name !== "exit") {
+                stopFootsteps();
+                player.isInDialogue = true;
+                displayDialogue(
+                  dialogueData[boundary.name],
+                  () => (player.isInDialogue = false)
+                );
+              }
             });
           }
         }
       }
-
       continue;
     }
 
@@ -102,7 +155,6 @@ k.scene("outdoor", async () => {
       (map.pos.y + playerSpawnPoint.y) * scaleFactor
     );
   } else {
-    // Default spawn if no spawn point found
     player.pos = k.vec2(268 * scaleFactor, 280 * scaleFactor);
   }
 
@@ -124,15 +176,20 @@ k.scene("outdoor", async () => {
     }
   });
 
-  // Mouse controls
+  // Mouse controls - FIXED to only start footsteps when movement begins
   k.onMouseDown((mouseBtn) => {
     if (mouseBtn !== "left" || player.isInDialogue) return;
+
+    // Only start footsteps if not already moving
+    if (!player.isMoving) {
+      player.isMoving = true;
+      startFootsteps();
+    }
 
     const worldMousePos = k.toWorld(k.mousePos());
     player.moveTo(worldMousePos, player.speed);
 
     const mouseAngle = player.pos.angle(worldMousePos);
-
     const lowerBound = 50;
     const upperBound = 125;
 
@@ -172,6 +229,15 @@ k.scene("outdoor", async () => {
   });
 
   function stopAnims() {
+    // Stop player movement
+    player.stop();
+    
+    // Stop footsteps if player was moving
+    if (player.isMoving) {
+      player.isMoving = false;
+      stopFootsteps();
+    }
+    
     if (player.direction === "down") {
       player.play("idle-down");
       return;
@@ -180,34 +246,35 @@ k.scene("outdoor", async () => {
       player.play("idle-up");
       return;
     }
-
     player.play("idle-side");
   }
 
   k.onMouseRelease(stopAnims);
 
-  k.onKeyRelease(() => {
-    stopAnims();
-  });
+  // Handle keyboard movement - SIMPLIFIED APPROACH
+  let keyMovementActive = false;
   
   k.onKeyDown((key) => {
+    if (player.isInDialogue) return;
+    
+    // Check if any movement key is pressed
     const keyMap = [
       k.isKeyDown("right"),
       k.isKeyDown("left"),
       k.isKeyDown("up"),
       k.isKeyDown("down"),
     ];
-
-    let nbOfKeyPressed = 0;
-    for (const key of keyMap) {
-      if (key) {
-        nbOfKeyPressed++;
-      }
+    
+    const isMoving = keyMap[0] || keyMap[1] || keyMap[2] || keyMap[3];
+    
+    // Start footsteps if movement begins
+    if (isMoving && !player.isMoving) {
+      player.isMoving = true;
+      startFootsteps();
+      keyMovementActive = true;
     }
-
-    if (nbOfKeyPressed > 1) return;
-
-    if (player.isInDialogue) return;
+    
+    // Handle movement direction
     if (keyMap[0]) {
       player.flipX = false;
       if (player.curAnim() !== "walk-side") player.play("walk-side");
@@ -235,6 +302,46 @@ k.scene("outdoor", async () => {
       if (player.curAnim() !== "walk-down") player.play("walk-down");
       player.direction = "down";
       player.move(0, player.speed);
+    }
+  });
+  
+  k.onKeyRelease((key) => {
+    // Check if movement keys are still pressed
+    const keyMap = [
+      k.isKeyDown("right"),
+      k.isKeyDown("left"),
+      k.isKeyDown("up"),
+      k.isKeyDown("down"),
+    ];
+    
+    const isMoving = keyMap[0] || keyMap[1] || keyMap[2] || keyMap[3];
+    
+    // Stop footsteps if no movement keys are pressed
+    if (!isMoving && keyMovementActive) {
+      keyMovementActive = false;
+      player.isMoving = false;
+      stopFootsteps();
+      
+      // Stop player movement
+      player.stop();
+      
+      // Set idle animation
+      if (player.direction === "down") {
+        player.play("idle-down");
+      } else if (player.direction === "up") {
+        player.play("idle-up");
+      } else {
+        player.play("idle-side");
+      }
+    }
+  });
+
+  // Add keyboard controls for audio
+  k.onKeyPress("m", () => {
+    if (audioState.bgMusicPlaying) {
+      stopBackgroundMusic();
+    } else {
+      playBackgroundMusic();
     }
   });
 });
@@ -259,11 +366,11 @@ k.scene("indoor", async () => {
       speed: 250,
       direction: "down",
       isInDialogue: false,
+      isMoving: false,
     },
     "player",
   ]);
 
-  // Store spawn point to use after player is added
   let playerSpawnPoint = null;
 
   for (const layer of layers) {
@@ -279,17 +386,14 @@ k.scene("indoor", async () => {
         ]);
 
         if (boundary.name) {
-          // Check if this is a door boundary to go back outside
           if (boundary.name === "door" || boundary.name === "exit") {
             player.onCollide(boundary.name, () => {
-         
-                  k.go("outdoor");
-                  
-                  
+              stopFootsteps();
+              k.go("outdoor");
             });
           } else {
-            // Regular boundaries
             player.onCollide(boundary.name, () => {
+              stopFootsteps();
               player.isInDialogue = true;
               displayDialogue(
                 dialogueData[boundary.name],
@@ -299,7 +403,6 @@ k.scene("indoor", async () => {
           }
         }
       }
-
       continue;
     }
 
@@ -319,7 +422,6 @@ k.scene("indoor", async () => {
       (map.pos.y + playerSpawnPoint.y) * scaleFactor
     );
   } else {
-    // Default spawn if no spawn point found (near a door)
     player.pos = k.vec2(200 * scaleFactor, 200 * scaleFactor);
   }
 
@@ -341,15 +443,20 @@ k.scene("indoor", async () => {
     }
   });
 
-  // Mouse controls (same as outdoor)
+  // Mouse controls
   k.onMouseDown((mouseBtn) => {
     if (mouseBtn !== "left" || player.isInDialogue) return;
+
+    // Only start footsteps if not already moving
+    if (!player.isMoving) {
+      player.isMoving = true;
+      startFootsteps();
+    }
 
     const worldMousePos = k.toWorld(k.mousePos());
     player.moveTo(worldMousePos, player.speed);
 
     const mouseAngle = player.pos.angle(worldMousePos);
-
     const lowerBound = 50;
     const upperBound = 125;
 
@@ -389,6 +496,15 @@ k.scene("indoor", async () => {
   });
 
   function stopAnims() {
+    // Stop player movement
+    player.stop();
+    
+    // Stop footsteps if player was moving
+    if (player.isMoving) {
+      player.isMoving = false;
+      stopFootsteps();
+    }
+    
     if (player.direction === "down") {
       player.play("idle-down");
       return;
@@ -397,34 +513,35 @@ k.scene("indoor", async () => {
       player.play("idle-up");
       return;
     }
-
     player.play("idle-side");
   }
 
   k.onMouseRelease(stopAnims);
 
-  k.onKeyRelease(() => {
-    stopAnims();
-  });
+  // Handle keyboard movement for indoor scene
+  let keyMovementActive = false;
   
   k.onKeyDown((key) => {
+    if (player.isInDialogue) return;
+    
+    // Check if any movement key is pressed
     const keyMap = [
       k.isKeyDown("right"),
       k.isKeyDown("left"),
       k.isKeyDown("up"),
       k.isKeyDown("down"),
     ];
-
-    let nbOfKeyPressed = 0;
-    for (const key of keyMap) {
-      if (key) {
-        nbOfKeyPressed++;
-      }
+    
+    const isMoving = keyMap[0] || keyMap[1] || keyMap[2] || keyMap[3];
+    
+    // Start footsteps if movement begins
+    if (isMoving && !player.isMoving) {
+      player.isMoving = true;
+      startFootsteps();
+      keyMovementActive = true;
     }
-
-    if (nbOfKeyPressed > 1) return;
-
-    if (player.isInDialogue) return;
+    
+    // Handle movement direction
     if (keyMap[0]) {
       player.flipX = false;
       if (player.curAnim() !== "walk-side") player.play("walk-side");
@@ -454,7 +571,48 @@ k.scene("indoor", async () => {
       player.move(0, player.speed);
     }
   });
+  
+  k.onKeyRelease((key) => {
+    // Check if movement keys are still pressed
+    const keyMap = [
+      k.isKeyDown("right"),
+      k.isKeyDown("left"),
+      k.isKeyDown("up"),
+      k.isKeyDown("down"),
+    ];
+    
+    const isMoving = keyMap[0] || keyMap[1] || keyMap[2] || keyMap[3];
+    
+    // Stop footsteps if no movement keys are pressed
+    if (!isMoving && keyMovementActive) {
+      keyMovementActive = false;
+      player.isMoving = false;
+      stopFootsteps();
+      
+      // Stop player movement
+      player.stop();
+      
+      // Set idle animation
+      if (player.direction === "down") {
+        player.play("idle-down");
+      } else if (player.direction === "up") {
+        player.play("idle-up");
+      } else {
+        player.play("idle-side");
+      }
+    }
+  });
+
+  // Add keyboard controls for audio
+  k.onKeyPress("m", () => {
+    if (audioState.bgMusicPlaying) {
+      stopBackgroundMusic();
+    } else {
+      playBackgroundMusic();
+    }
+  });
 });
 
 // Start with outdoor scene
 k.go("outdoor");
+playBackgroundMusic();  
