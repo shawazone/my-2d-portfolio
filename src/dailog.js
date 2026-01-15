@@ -30,7 +30,7 @@ export const dialogueData = {
 
   fire: `A warm fire is always comforting!`,
 
-  spawnpoint: `Hello! ,My name is Mohamad Alshawa, I'm a software developer. you can check my resume by interacting with the desk in my room. or by this <a href="https://mohamad-alshawa.netlify.app/" target="_blank">Link</a> in case you don't have exploreer spirit ;) `,
+  lamp: `Hello! ,My name is Mohamad Alshawa, I'm a software developer. you can check my resume by interacting with the desk in my room. or by this <a href="https://mohamad-alshawa.netlify.app/" target="_blank">Link</a> in case you don't have explorer spirit ;) `,
 
   github: `This project is open source check it out on my : <a href="https://github.com/shawazone" target="_blank">GitHub</a>`,
 

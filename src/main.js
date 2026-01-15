@@ -76,7 +76,7 @@ function stopFootsteps() {
 
 // OUTDOOR SCENE
 k.scene("outdoor", async () => {
-  const mapData = await (await fetch("./outdoor3.json")).json();
+  const mapData = await (await fetch("./outdoor4.json")).json();
   const layers = mapData.layers;
 
   const map = k.add([k.sprite("outdoor"), k.pos(0), k.scale(scaleFactor)]);
@@ -124,7 +124,7 @@ k.scene("outdoor", async () => {
             });
           } else {
             player.onCollide(boundary.name, () => {
-              if (boundary.name !== "wall" && boundary.name !== "exit") {
+              if (boundary.name !== "wall" && boundary.name !== "exit" && boundary.name !== "spawnpoints") {
                 stopFootsteps();
                 player.isInDialogue = true;
                 displayDialogue(
@@ -155,8 +155,11 @@ k.scene("outdoor", async () => {
       (map.pos.y + playerSpawnPoint.y) * scaleFactor
     );
   } else {
-    player.pos = k.vec2(268 * scaleFactor, 280 * scaleFactor);
+    player.pos = k.vec2(260 * scaleFactor, 280 * scaleFactor);
   }
+
+
+  
 
   // Add player to scene
   k.add(player);
