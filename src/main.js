@@ -4,7 +4,7 @@ import { displayDialogue, setCamScale } from "./utils";
 
 // Load audio files
 k.loadSound("bg-music", "./background.mp3");
-k.loadSound("footsteps", "./footsteps.mp3");
+k.loadSound("footsteps", "./footsteps1.mp3");
 
 k.loadSprite("spritesheet", "./spritesheet.png", {
   sliceX: 39,
@@ -20,8 +20,8 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
 });
 
 // Load both maps
-k.loadSprite("outdoor", "./outdoor1.png");
-k.loadSprite("indoor", "./map.png");
+k.loadSprite("outdoor", "./outdoor4.png");
+k.loadSprite("indoor", "./map1.png");
 
 k.setBackground(k.Color.fromHex("#000000"));
 
@@ -32,6 +32,8 @@ const audioState = {
   footstepLoop: null,
   lastFootstepTime: 0,
 };
+  let playerSpawnPoint = null;
+  let playerExitPoint = null;
 
 function playBackgroundMusic() {
   if (audioState.bgMusicLoop) {
@@ -76,7 +78,7 @@ function stopFootsteps() {
 
 // OUTDOOR SCENE
 k.scene("outdoor", async () => {
-  const mapData = await (await fetch("./outdoor1.json")).json();
+  const mapData = await (await fetch("./outdoor4.json")).json();
   const layers = mapData.layers;
 
   const map = k.add([k.sprite("outdoor"), k.pos(0), k.scale(scaleFactor)]);
@@ -100,7 +102,8 @@ k.scene("outdoor", async () => {
   ]);
 
   // Store spawn point to use after player is added
-  let playerSpawnPoint = null;
+
+  console.log("playerExitPoint:", playerExitPoint);
 
   for (const layer of layers) {
     if (layer.name === "boundaries") {
@@ -117,14 +120,20 @@ k.scene("outdoor", async () => {
         if (boundary.name) {
           if (boundary.name === "door" || boundary.name === "exit") {
             player.onCollide(boundary.name, () => {
-              if (boundary.name === "door" || boundary.name === "exit") {
+              if (boundary.name === "door" ) {
                 stopFootsteps();
                 k.go("indoor");
+              } else if (boundary.name === "exit") {
+                stopFootsteps();
+                playerExitPoint = true;
+                console.log("playerExitPoint set to true 1");
+                k.go("outdoor");
+                
               }
             });
           } else {
             player.onCollide(boundary.name, () => {
-              if (boundary.name !== "wall" && boundary.name !== "exit") {
+              if (boundary.name !== "wall" && boundary.name !== "exit" && boundary.name !== "spawnpoints") {
                 stopFootsteps();
                 player.isInDialogue = true;
                 displayDialogue(
@@ -149,14 +158,25 @@ k.scene("outdoor", async () => {
   }
 
   // Set player position
-  if (playerSpawnPoint) {
+  if (playerExitPoint) {
+    player.pos = k.vec2(270 * scaleFactor, 160 * scaleFactor);
+   }
+  else if (playerSpawnPoint) {
+    console.log("Spawning at:", playerSpawnPoint);
     player.pos = k.vec2(
       (map.pos.x + playerSpawnPoint.x) * scaleFactor,
       (map.pos.y + playerSpawnPoint.y) * scaleFactor
     );
-  } else {
-    player.pos = k.vec2(269 * scaleFactor, 280 * scaleFactor);
+  } 
+  // else if (playerExitPoint) {
+  //   player.pos = k.vec2(100 * scaleFactor, 280 * scaleFactor);
+  // }
+    else {
+    player.pos = k.vec2(260 * scaleFactor, 280 * scaleFactor);
   }
+
+
+  
 
   // Add player to scene
   k.add(player);
@@ -348,7 +368,7 @@ k.scene("outdoor", async () => {
 
 // INDOOR SCENE
 k.scene("indoor", async () => {
-  const mapData = await (await fetch("./map.json")).json();
+  const mapData = await (await fetch("./map1.json")).json();
   const layers = mapData.layers;
 
   const map = k.add([k.sprite("indoor"), k.pos(0), k.scale(scaleFactor)]);
@@ -371,7 +391,6 @@ k.scene("indoor", async () => {
     "player",
   ]);
 
-  let playerSpawnPoint = null;
 
   for (const layer of layers) {
     if (layer.name === "boundaries") {
@@ -386,12 +405,20 @@ k.scene("indoor", async () => {
         ]);
 
         if (boundary.name) {
-          if (boundary.name === "door" || boundary.name === "exit") {
+          if (boundary.name === "door") {
             player.onCollide(boundary.name, () => {
               stopFootsteps();
+              k.go("indoor");
+            }); 
+          } else if (boundary.name === "exit") {
+             player.onCollide(boundary.name, () => {
+              stopFootsteps();
+              playerExitPoint = true;
+              console.log("playerExitPoint set to true");
               k.go("outdoor");
             });
-          } else {
+          } 
+          else {
             player.onCollide(boundary.name, () => {
               stopFootsteps();
               player.isInDialogue = true;
@@ -421,7 +448,11 @@ k.scene("indoor", async () => {
       (map.pos.x + playerSpawnPoint.x) * scaleFactor,
       (map.pos.y + playerSpawnPoint.y) * scaleFactor
     );
-  } else {
+
+  } else if (playerExitPoint) {
+    player.pos = k.vec2(200 * scaleFactor, 200 * scaleFactor);
+  }
+   else {
     player.pos = k.vec2(200 * scaleFactor, 200 * scaleFactor);
   }
 
