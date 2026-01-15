@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/axe.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>2D Portfolio</title>
   </head>
   <body>
@@ -19,20 +19,30 @@
         overflow: hidden;
         margin: 0;
         padding: 0;
+        /* Safe area for iOS */
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
       }
 
       #app {
         width: 100%;
         height: 100vh;
+        /* For iOS Safari */
+        height: -webkit-fill-available;
+        height: calc(100vh - env(safe-area-inset-bottom));
         position: relative;
         overflow: hidden;
+        /* Ensure the app respects safe areas */
+        padding-bottom: env(safe-area-inset-bottom);
       }
 
       #textbox {
-        position: absolute;
+        position: fixed; /* Changed from absolute to fixed */
         left: 5%;
         right: 5%;
-        bottom: 2vh;
+        bottom: max(2vh, env(safe-area-inset-bottom) + 2vh); /* Account for safe area */
         min-height: 10vh;
         background: white;
         border-radius: 3px;
@@ -46,12 +56,17 @@
         word-spacing: 0.2rem;
         filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
         box-sizing: border-box;
+        z-index: 1000; /* Ensure it's above everything */
+        /* Prevent textbox from being too tall on small screens */
+        max-height: 50vh;
+        overflow-y: auto;
       }
 
       .ui-text {
         margin: 0;
         user-select: none;
         line-height: 1.2;
+        word-break: break-word; /* Prevent text overflow */
       }
 
       .ui-close-btn {
@@ -63,6 +78,9 @@
         cursor: pointer;
         background-color: #f0f0f0;
         transition: background-color 0.2s ease;
+        min-height: 44px; /* Apple's minimum touch target size */
+        min-width: 44px;
+        touch-action: manipulation; /* Improve touch response */
       }
 
       .ui-close-btn:hover {
@@ -72,29 +90,59 @@
       .btn-container {
         align-self: flex-end;
         margin-top: 1rem;
+        /* Ensure button is always accessible */
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding-top: 0.5rem;
       }
 
       .note {
         position: absolute;
         left: 5%;
-        top: 1vh;
+        top: max(1vh, env(safe-area-inset-top) + 1vh); /* Account for notch */
         display: flex;
         flex-direction: column;
         color: rgb(238, 238, 238);
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         z-index: 10;
+        /* Ensure note doesn't overlap with iOS status bar */
+        padding-top: env(safe-area-inset-top);
       }
 
       #game {
         width: 100%;
         height: 100%;
         display: block;
+        /* Ensure game canvas respects safe areas */
+        position: relative;
+        z-index: 1;
+      }
+
+      /* iOS Safari specific fixes */
+      @supports (-webkit-touch-callout: none) {
+        #app {
+          /* iOS Safari specific height calculation */
+          height: -webkit-fill-available;
+        }
+        
+        #textbox {
+          /* Use fixed positioning to stay above Safari UI */
+          position: fixed;
+          /* Add extra padding for Safari's bottom bar */
+          padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+        
+        .ui-close-btn {
+          /* Larger touch targets for iOS */
+          padding: 1rem 2rem;
+        }
       }
 
       /* Responsive design for screens below 412px */
       @media screen and (max-width: 412px) {
         body {
-          font-size: 1.2rem; /* Reduced base font size */
+          font-size: 1.2rem;
         }
 
         #textbox {
@@ -102,23 +150,40 @@
           right: 3%;
           padding: 0.75rem;
           min-height: 8vh;
-          bottom: 1vh;
+          bottom: max(1vh, env(safe-area-inset-bottom) + 1vh);
+          padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+          margin-bottom: 100px;
         }
 
         .note {
-          font-size: 0.9rem; /* Smaller note text */
+          font-size: 0.9rem;
           left: 3%;
-          top: 0.5vh;
+          top: max(0.5vh, env(safe-area-inset-top) + 0.5vh);
+          padding-top: max(0, env(safe-area-inset-top));
         }
 
         .ui-close-btn {
-          padding: 0.5rem 1rem;
-          font-size: 0.9rem; /* Smaller button text */
+          padding: 0.75rem 1.5rem;
+          font-size: 0.9rem;
+          min-height: 44px;
+          min-width: 44px;
         }
 
         .ui-text {
-          font-size: 1rem; /* Smaller dialogue text */
+          font-size: 1rem;
           line-height: 1.1;
+        }
+      }
+
+      /* Mobile landscape orientation fix */
+      @media screen and (max-height: 500px) and (orientation: landscape) {
+        #textbox {
+          max-height: 70vh;
+          overflow-y: auto;
+        }
+        
+        .note {
+          display: none; /* Hide note in landscape to save space */
         }
       }
 
@@ -133,21 +198,26 @@
           right: 2%;
           padding: 0.5rem;
           min-height: 6vh;
-          bottom: 0.5vh;
+          bottom: max(0.5vh, env(safe-area-inset-bottom) + 0.5vh);
+          padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
         }
 
         .note {
           font-size: 0.8rem;
           left: 2%;
+          top: max(0, env(safe-area-inset-top));
         }
 
         .ui-close-btn {
-          padding: 0.4rem 0.8rem;
+          padding: 0.6rem 1.2rem;
           font-size: 0.8rem;
+          min-height: 36px;
+          min-width: 36px;
         }
 
         .ui-text {
           font-size: 0.9rem;
+          
         }
       }
 
@@ -157,10 +227,12 @@
           left: 10%;
           right: 10%;
           padding: 1.5rem;
+          bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         }
 
         .note {
           left: 10%;
+          top: max(1vh, env(safe-area-inset-top) + 1vh);
         }
       }
 
@@ -171,10 +243,19 @@
           right: 15%;
           max-width: 1200px;
           margin: 0 auto;
+          bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         }
 
         .note {
           left: 15%;
+          top: max(1vh, env(safe-area-inset-top) + 1vh);
+        }
+      }
+
+      /* Hide note on very small heights to prevent overlap */
+      @media screen and (max-height: 400px) {
+        .note {
+          display: none;
         }
       }
     </style>
