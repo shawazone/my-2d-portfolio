@@ -1,0 +1,73 @@
+# 🎮 Interactive Portfolio Game
+
+An immersive **2D pixel-art portfolio** built as a game using **Kaboom.js**, **React**, and **Vite**.  
+Instead of scrolling a traditional website, visitors **explore a world**, interact with objects, and discover projects, skills, and information through gameplay and dialogue.
+
+---
+
+## 🧠 Concept
+
+This project reimagines a personal portfolio as a **top-down RPG-style experience**:
+
+- Walk around outdoor and indoor maps
+- Enter buildings and rooms
+- Interact with objects to trigger dialogue
+- Learn about projects, skills, and background organically
+- Enjoy ambient music and sound effects for immersion
+
+It’s a portfolio you **play**, not just read.
+
+---
+
+## ✨ Features
+
+- 🗺️ **Multiple Scenes** (Outdoor & Indoor maps)
+- 🧍 **Animated Player Character** (Idle / Walk in all directions)
+- 🖱️ **Mouse Click-to-Move** + ⌨️ **Keyboard Controls (WASD / Arrows)**
+- 💬 **Interactive Dialogue System**
+- 🎵 **Background Music** with toggle (`M` key)
+- 👣 **Dynamic Footstep Sound Effects**
+- 📷 **Smooth Camera Follow & Responsive Scaling**
+- 🧩 **Tiled Map Integration (JSON-based collisions & spawn points)**
+
+---
+
+## 🛠️ Tech Stack
+
+- **React** – Application structure
+- **Vite** – Fast bundler & dev server
+- **Kaboom.js** – Game engine
+- **Tiled Map Editor** – Level design
+- **JavaScript (ES Modules)**
+- **HTML5 Audio**
+
+---
+
+## 🎮 Controls
+
+| Action              | Control                    |
+|---------------------|----------------------------|
+| Move                | Mouse Click / WASD / Arrows |
+| Interact            | Collision-based            |
+| Toggle Music        | `M`                        |
+
+---
+
+## 🖼️ Preview
+
+![Game Preview]("https://github.com/shawazone/my-2d-portfolio/blob/master/public/outdoor4.png")
+
+
+
+---
+
+## 🔗 Live Demo
+
+👉 **Play Here:** [https://mohamad-alshawa-2d-portfolio.netlify.app/](LIVE_LINK_HERE)
+
+
+
+---
+
+<!-- ## 📁 Project Structure (Simplified) -->
+
