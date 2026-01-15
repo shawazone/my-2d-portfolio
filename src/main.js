@@ -21,7 +21,7 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
 
 // Load both maps
 k.loadSprite("outdoor", "./outdoor4.png");
-k.loadSprite("indoor", "./map.png");
+k.loadSprite("indoor", "./map1.png");
 
 k.setBackground(k.Color.fromHex("#000000"));
 
@@ -368,7 +368,7 @@ k.scene("outdoor", async () => {
 
 // INDOOR SCENE
 k.scene("indoor", async () => {
-  const mapData = await (await fetch("./map.json")).json();
+  const mapData = await (await fetch("./map1.json")).json();
   const layers = mapData.layers;
 
   const map = k.add([k.sprite("indoor"), k.pos(0), k.scale(scaleFactor)]);

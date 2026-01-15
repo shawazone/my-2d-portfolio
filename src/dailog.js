@@ -2,7 +2,7 @@ export const scaleFactor = 4;
 
 export const dialogueData = {
   pc: `This is my PC. I work mostly in JavaScript/TypeScript these days. I like to build web apps (using MERN stack) and sometimes games. I also have experience with Python,ML, Prompt Engineering, Google Cloud, and more.`,
-  "cs-degree": `This is my CS degree. I hung it on the wall because I'm proud of it. It was a very theoretical degree but I think it gave me a good foundation.`,
+  "cs-degree": `This is my CS degree from the Lebanese University I hung it on the wall because I'm proud of it. It was a very theoretical degree but I think it gave me a good foundation.`,
   "sofa-table": `That's my sofa. I like to relax here and watch YouTube. `,
 
   tv: `That's my TV. I've been watching tech youtubers Linus Tech Tips since I was a kid.`,
@@ -17,6 +17,11 @@ export const dialogueData = {
 
   library: `There are a lot of programming books on my shelves. There is even one in Arabic (I also speak Arabic btw).`,
   
+  fridge: `This is my fridge. I like to keep it stocked with healthy food like fruits and vegetables. I also like to keep some snacks in there for when I need a quick energy boost.`,
+
+  medal: `Those are my 10K and 5K Running Medals. I run to stay fit and clear my mind. Running helps me think better and be more productive.`,
+
+  hike: `Here i store my hiking gear. I love hiking and exploring nature! It's a great way to disconnect from technology and recharge my mind.`,
 
   door: `This is the exit door. Click it to leave my portfolio. Thank you for visiting!`,
 
