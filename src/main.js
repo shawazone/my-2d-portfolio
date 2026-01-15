@@ -4,7 +4,7 @@ import { displayDialogue, setCamScale } from "./utils";
 
 // Load audio files
 k.loadSound("bg-music", "./background.mp3");
-k.loadSound("footsteps", "./footsteps1.mp3");
+k.loadSound("footsteps", "./footsteps.mp3");
 
 k.loadSprite("spritesheet", "./spritesheet.png", {
   sliceX: 39,
