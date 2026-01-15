@@ -60,6 +60,7 @@
         /* Prevent textbox from being too tall on small screens */
         max-height: 50vh;
         overflow-y: auto;
+        margin-bottom: 10px; /* Extra space for safe area */
       }
 
       .ui-text {
@@ -97,17 +98,226 @@
         padding-top: 0.5rem;
       }
 
-      .note {
+      /* Pixel Art Info Button Styles */
+      .info-button {
         position: absolute;
         left: 5%;
-        top: max(1vh, env(safe-area-inset-top) + 1vh); /* Account for notch */
+        top: max(1vh, env(safe-area-inset-top) + 1vh);
+        background-color: rgba(0, 0, 0, 0.8);
+        border: 3px solid #ffffff;
+        border-radius: 0; /* Pixel art: no rounded corners */
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        transition: all 0.2s ease;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        box-shadow: 
+          2px 2px 0px rgba(0, 0, 0, 0.5),
+          inset 2px 2px 0px rgba(255, 255, 255, 0.3);
+        padding: 0;
+      }
+
+      .info-button:hover {
+        background-color: rgba(30, 30, 30, 0.9);
+        transform: translate(1px, 1px);
+        box-shadow: 
+          1px 1px 0px rgba(0, 0, 0, 0.5),
+          inset 2px 2px 0px rgba(255, 255, 255, 0.3);
+      }
+
+      .info-button.active {
+        background-color: rgba(255, 255, 255, 0.9);
+        transform: translate(2px, 2px);
+        box-shadow: 
+          0px 0px 0px rgba(0, 0, 0, 0.5),
+          inset 2px 2px 0px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Pixel Art "i" Icon */
+      .pixel-i {
+        width: 32px;
+        height: 32px;
+        position: relative;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+
+      /* Create pixel art "i" using CSS pixels */
+      .pixel-i::before,
+      .pixel-i::after {
+        content: '';
+        position: absolute;
+        background-color: #ffffff;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+
+      /* Top dot of the "i" */
+      .pixel-i::before {
+        width: 8px;
+        height: 8px;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 
+          0 0 0 1px #000000,
+          1px 1px 0 1px #000000,
+          1px 0 0 1px #000000,
+          0 1px 0 1px #000000;
+      }
+
+      /* Stem of the "i" */
+      .pixel-i::after {
+        width: 8px;
+        height: 20px;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 
+          0 0 0 1px #000000,
+          1px 1px 0 1px #000000,
+          1px 0 0 1px #000000,
+          0 1px 0 1px #000000;
+      }
+
+      .info-button.active .pixel-i::before,
+      .info-button.active .pixel-i::after {
+        background-color: #000000;
+        box-shadow: 
+          0 0 0 1px #ffffff,
+          1px 1px 0 1px #ffffff,
+          1px 0 0 1px #ffffff,
+          0 1px 0 1px #ffffff;
+      }
+
+      /* Alternative: Use pixel font for the "i" */
+      .pixel-font-i {
+        font-family: 'Courier New', monospace;
+        font-size: 24px;
+        font-weight: bold;
+        color: #ffffff;
+        text-shadow: 
+          2px 0 0 #000,
+          0 2px 0 #000,
+          -2px 0 0 #000,
+          0 -2px 0 #000,
+          2px 2px 0 #000,
+          -2px -2px 0 #000,
+          2px -2px 0 #000,
+          -2px 2px 0 #000,
+          1px 1px 0 #000;
+        letter-spacing: 0;
+      }
+
+      .info-button.active .pixel-font-i {
+        color: #000000;
+        text-shadow: 
+          2px 0 0 #fff,
+          0 2px 0 #fff,
+          -2px 0 0 #fff,
+          0 -2px 0 #fff,
+          2px 2px 0 #fff,
+          -2px -2px 0 #fff,
+          2px -2px 0 #fff,
+          -2px 2px 0 #fff,
+          1px 1px 0 #fff;
+      }
+
+      /* Info Panel Styles - Keep pixel art style consistent */
+      .info-panel {
+        position: absolute;
+        left: 5%;
+        top: calc(max(1vh, env(safe-area-inset-top) + 1vh) + 60px);
+        background-color: rgba(0, 0, 0, 0.95);
+        color: rgb(238, 238, 238);
+        border-radius: 0; /* Pixel art: no rounded corners */
+        padding: 1.5rem;
+        width: 300px;
+        max-width: 90vw;
+        z-index: 10;
+        display: none;
+        flex-direction: column;
+        gap: 0.8rem;
+        text-shadow: 
+          1px 0 0 #000,
+          0 1px 0 #000,
+          -1px 0 0 #000,
+          0 -1px 0 #000;
+        box-shadow: 
+          4px 4px 0px rgba(0, 0, 0, 0.8),
+          inset 2px 2px 0px rgba(255, 255, 255, 0.1);
+        border: 3px solid #ffffff;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+
+      .info-panel.active {
+        display: flex;
+        animation: pixelSlideDown 0.3s steps(4, end);
+      }
+
+      @keyframes pixelSlideDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .info-panel p {
+        margin: 0;
+        line-height: 1.4;
+        font-family: monogram, monospace;
+        letter-spacing: 0;
+      }
+
+      .info-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        padding-bottom: 0.5rem;
+        text-align: center;
+        text-shadow: 
+          2px 0 0 #000,
+          0 2px 0 #000,
+          -2px 0 0 #000,
+          0 -2px 0 #000;
+      }
+
+      .info-item {
         display: flex;
         flex-direction: column;
-        color: rgb(238, 238, 238);
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        z-index: 10;
-        /* Ensure note doesn't overlap with iOS status bar */
-        padding-top: env(safe-area-inset-top);
+        gap: 0.3rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0.5rem;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .info-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+        color: #a0a0ff;
+        text-shadow: 
+          1px 0 0 #000,
+          0 1px 0 #000;
+      }
+
+      .info-content {
+        font-size: 0.8em;
+        opacity: 0.8;
+        color: #ffffff;
+        text-shadow: 
+          1px 0 0 #000,
+          0 1px 0 #000;
       }
 
       #game {
@@ -117,6 +327,8 @@
         /* Ensure game canvas respects safe areas */
         position: relative;
         z-index: 1;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
       }
 
       /* iOS Safari specific fixes */
@@ -137,6 +349,29 @@
           /* Larger touch targets for iOS */
           padding: 1rem 2rem;
         }
+        
+        .info-button {
+          /* Larger touch target for iOS */
+          width: 60px;
+          height: 60px;
+        }
+        
+        .pixel-i {
+          width: 40px;
+          height: 40px;
+        }
+        
+        .pixel-i::before {
+          width: 10px;
+          height: 10px;
+          top: 5px;
+        }
+        
+        .pixel-i::after {
+          width: 10px;
+          height: 25px;
+          top: 20px;
+        }
       }
 
       /* Responsive design for screens below 412px */
@@ -152,14 +387,52 @@
           min-height: 8vh;
           bottom: max(1vh, env(safe-area-inset-bottom) + 1vh);
           padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-          margin-bottom: 100px;
         }
 
-        .note {
-          font-size: 0.9rem;
+        .info-button {
           left: 3%;
           top: max(0.5vh, env(safe-area-inset-top) + 0.5vh);
-          padding-top: max(0, env(safe-area-inset-top));
+          width: 45px;
+          height: 45px;
+          border-width: 2px;
+        }
+
+        .pixel-i {
+          width: 28px;
+          height: 28px;
+        }
+
+        .pixel-i::before {
+          width: 6px;
+          height: 6px;
+          top: 3px;
+        }
+
+        .pixel-i::after {
+          width: 6px;
+          height: 16px;
+          top: 13px;
+        }
+
+        .info-panel {
+          left: 3%;
+          top: calc(max(0.5vh, env(safe-area-inset-top) + 0.5vh) + 55px);
+          width: 280px;
+          padding: 1rem;
+          gap: 0.6rem;
+          border-width: 2px;
+        }
+
+        .info-title {
+          font-size: 1.1em;
+        }
+
+        .info-label {
+          font-size: 0.85em;
+        }
+
+        .info-content {
+          font-size: 0.75em;
         }
 
         .ui-close-btn {
@@ -182,8 +455,9 @@
           overflow-y: auto;
         }
         
-        .note {
-          display: none; /* Hide note in landscape to save space */
+        .info-panel {
+          max-height: 80vh;
+          overflow-y: auto;
         }
       }
 
@@ -202,10 +476,50 @@
           padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
         }
 
-        .note {
-          font-size: 0.8rem;
+        .info-button {
           left: 2%;
           top: max(0, env(safe-area-inset-top));
+          width: 40px;
+          height: 40px;
+          border-width: 2px;
+        }
+
+        .pixel-i {
+          width: 24px;
+          height: 24px;
+        }
+
+        .pixel-i::before {
+          width: 5px;
+          height: 5px;
+          top: 2px;
+        }
+
+        .pixel-i::after {
+          width: 5px;
+          height: 14px;
+          top: 11px;
+        }
+
+        .info-panel {
+          left: 2%;
+          top: calc(max(0, env(safe-area-inset-top)) + 50px);
+          width: 250px;
+          padding: 0.8rem;
+          gap: 0.5rem;
+          border-width: 2px;
+        }
+
+        .info-title {
+          font-size: 1em;
+        }
+
+        .info-label {
+          font-size: 0.8em;
+        }
+
+        .info-content {
+          font-size: 0.7em;
         }
 
         .ui-close-btn {
@@ -217,7 +531,6 @@
 
         .ui-text {
           font-size: 0.9rem;
-          
         }
       }
 
@@ -230,9 +543,14 @@
           bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         }
 
-        .note {
+        .info-button {
           left: 10%;
           top: max(1vh, env(safe-area-inset-top) + 1vh);
+        }
+
+        .info-panel {
+          left: 10%;
+          top: calc(max(1vh, env(safe-area-inset-top) + 1vh) + 60px);
         }
       }
 
@@ -246,25 +564,63 @@
           bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         }
 
-        .note {
+        .info-button {
           left: 15%;
           top: max(1vh, env(safe-area-inset-top) + 1vh);
         }
+
+        .info-panel {
+          left: 15%;
+          top: calc(max(1vh, env(safe-area-inset-top) + 1vh) + 60px);
+        }
       }
 
-      /* Hide note on very small heights to prevent overlap */
+      /* Hide info panel on very small heights */
       @media screen and (max-height: 400px) {
-        .note {
-          display: none;
+        .info-panel {
+          max-height: 70vh;
+          overflow-y: auto;
         }
       }
     </style>
     <div id="app">
-      <div class="note">
-        <p>Tap/Click around to move</p>
-        <p style="font-size: 0.8em; margin-top: 0.5vh;">Press M to toggle music 'only on desktop'</p>
+      <!-- Pixel Art Info Button -->
+      <button class="info-button" id="info-btn" aria-label="Toggle information panel">
+        <!-- Choose one of these styles for the "i" icon -->
+        
+        <!-- Option 1: CSS Pixel Art "i" (recommended for true pixel art) -->
+        <div class="pixel-i"></div>
+        
+        <!-- Option 2: Pixel Font "i" (alternative) -->
+        <!-- <div class="pixel-font-i">i</div> -->
+      </button>
+      
+      <!-- Pixel Art Info Panel -->
+      <div class="info-panel" id="info-panel">
+        <div class="info-title">CONTROLS & INFO</div>
+        
+        <div class="info-item">
+          <div class="info-label">MOVEMENT:</div>
+          <div class="info-content">CLICK/TAP ANYWHERE TO MOVE • USE ARROW KEYS (DESKTOP)</div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-label">MUSIC:</div>
+          <div class="info-content">PRESS M TO TOGGLE MUSIC (DESKTOP ONLY)</div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-label">LOADING:</div>
+          <div class="info-content">SITE TAKES A MOMENT TO LOAD, PLEASE BE PATIENT 😊</div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-label">INTERACTIONS:</div>
+          <div class="info-content">WALK UP TO OBJECTS TO INTERACT WITH THEM</div>
+        </div>
       </div>
 
+      <!-- Dialogue Textbox -->
       <div id="textbox-container" style="display: none">
         <div id="textbox">
           <p id="dialogue" class="ui-text"></p>
@@ -274,8 +630,56 @@
         </div>
       </div>
       
+      <!-- Game Canvas -->
       <canvas id="game"></canvas>
     </div>
+    
+    <!-- JavaScript for toggle functionality -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const infoBtn = document.getElementById('info-btn');
+        const infoPanel = document.getElementById('info-panel');
+        
+        // Toggle info panel when button is clicked
+        infoBtn.addEventListener('click', function() {
+          infoPanel.classList.toggle('active');
+          infoBtn.classList.toggle('active');
+          
+          // Update button aria-label
+          const isActive = infoPanel.classList.contains('active');
+          infoBtn.setAttribute('aria-label', isActive ? 'Close information panel' : 'Open information panel');
+          
+          // Play a subtle click sound if you have one
+          // if (typeof window.playSound === 'function') {
+          //   window.playSound('click');
+          // }
+        });
+        
+        // Close info panel when clicking outside
+        document.addEventListener('click', function(event) {
+          if (!infoBtn.contains(event.target) && !infoPanel.contains(event.target)) {
+            infoPanel.classList.remove('active');
+            infoBtn.classList.remove('active');
+            infoBtn.setAttribute('aria-label', 'Open information panel');
+          }
+        });
+        
+        // Close info panel with Escape key
+        document.addEventListener('keydown', function(event) {
+          if (event.key === 'Escape') {
+            infoPanel.classList.remove('active');
+            infoBtn.classList.remove('active');
+            infoBtn.setAttribute('aria-label', 'Open information panel');
+          }
+        });
+        
+        // Prevent clicks inside info panel from closing it
+        infoPanel.addEventListener('click', function(event) {
+          event.stopPropagation();
+        });
+      });
+    </script>
+    
     <script type="module" src="src/main.js"></script>
   </body>
 </html>
