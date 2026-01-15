@@ -66,6 +66,17 @@ It’s a portfolio you **play**, not just read.
 👉 **Play Here:** [https://mohamad-alshawa-2d-portfolio.netlify.app/](LIVE_LINK_HERE)
 
 
+---
+
+
+---
+
+## 🚀 Running Locally
+
+```bash
+npm install
+npm run dev
+```
 
 
 
