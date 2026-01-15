@@ -20,7 +20,7 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
 });
 
 // Load both maps
-k.loadSprite("outdoor", "./outdoor1.png");
+k.loadSprite("outdoor", "./outdoor4.png");
 k.loadSprite("indoor", "./map.png");
 
 k.setBackground(k.Color.fromHex("#000000"));
@@ -76,7 +76,7 @@ function stopFootsteps() {
 
 // OUTDOOR SCENE
 k.scene("outdoor", async () => {
-  const mapData = await (await fetch("./outdoor1.json")).json();
+  const mapData = await (await fetch("./outdoor3.json")).json();
   const layers = mapData.layers;
 
   const map = k.add([k.sprite("outdoor"), k.pos(0), k.scale(scaleFactor)]);

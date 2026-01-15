@@ -30,5 +30,13 @@ export const dialogueData = {
 
   fire: `A warm fire is always comforting!`,
 
-  spawnpoints: `Hello! , Welcome to my portfolio!`,
+  spawnpoint: `Hello! ,My name is Mohamad Alshawa, I'm a software developer. you can check my resume by interacting with the desk in my room. or by this <a href="https://mohamad-alshawa.netlify.app/" target="_blank">Link</a> in case you don't have exploreer spirit ;) `,
+
+  github: `This project is open source check it out on my : <a href="https://github.com/shawazone" target="_blank">GitHub</a>`,
+
+  linkedin: `Connect with me on <a href="https://www.linkedin.com/in/mohamad-alchawa/" target="_blank">LinkedIn</a>`,
+
+  cali: `This is my Calisthenics Area, I do Calisthenics (bodyweight training) to stay fit! you can check my progress on my <a href="https://www.instagram.com/shawazone/" target="_blank">Instagram</a>, Also i created a Calisthenics Website for my team you can check it out here : <a href="https://calisthenics-app.netlify.app/" target="_blank">Calisthenics Army</a>` ,
+
+  mailbox: `Feel free to send me an email at <a href="mailto:mohamad.alchawwa@gmail.com">mohamad.alchawwa@gmail.com</a> or check my <a href="https://mohamad-alshawa.netlify.app/" target="_blank">Portfolio</a>`,
 };

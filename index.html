@@ -17,18 +17,21 @@
         font-family: monogram, monospace;
         font-size: 2rem;
         overflow: hidden;
+        margin: 0;
+        padding: 0;
       }
 
       #app {
         width: 100%;
-        height: 100%;
+        height: 100vh;
         position: relative;
+        overflow: hidden;
       }
 
       #textbox {
         position: absolute;
-        left: 10%;
-        right: 10%;
+        left: 5%;
+        right: 5%;
         bottom: 2vh;
         min-height: 10vh;
         background: white;
@@ -42,20 +45,28 @@
         align-items: flex-start;
         word-spacing: 0.2rem;
         filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
-        /* overflow: auto; */
+        box-sizing: border-box;
       }
 
       .ui-text {
         margin: 0;
         user-select: none;
+        line-height: 1.2;
       }
 
       .ui-close-btn {
         font-family: monogram, monospace;
         border-style: none;
         border-radius: 3px;
-        padding: 1rem;
+        padding: 0.75rem 1.5rem;
         font-size: inherit;
+        cursor: pointer;
+        background-color: #f0f0f0;
+        transition: background-color 0.2s ease;
+      }
+
+      .ui-close-btn:hover {
+        background-color: #e0e0e0;
       }
 
       .btn-container {
@@ -70,21 +81,118 @@
         display: flex;
         flex-direction: column;
         color: rgb(238, 238, 238);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        z-index: 10;
+      }
+
+      #game {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Responsive design for screens below 412px */
+      @media screen and (max-width: 412px) {
+        body {
+          font-size: 1.2rem; /* Reduced base font size */
+        }
+
+        #textbox {
+          left: 3%;
+          right: 3%;
+          padding: 0.75rem;
+          min-height: 8vh;
+          bottom: 1vh;
+        }
+
+        .note {
+          font-size: 0.9rem; /* Smaller note text */
+          left: 3%;
+          top: 0.5vh;
+        }
+
+        .ui-close-btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem; /* Smaller button text */
+        }
+
+        .ui-text {
+          font-size: 1rem; /* Smaller dialogue text */
+          line-height: 1.1;
+        }
+      }
+
+      /* Optional: Additional breakpoints for better scaling */
+      @media screen and (max-width: 320px) {
+        body {
+          font-size: 1rem;
+        }
+
+        #textbox {
+          left: 2%;
+          right: 2%;
+          padding: 0.5rem;
+          min-height: 6vh;
+          bottom: 0.5vh;
+        }
+
+        .note {
+          font-size: 0.8rem;
+          left: 2%;
+        }
+
+        .ui-close-btn {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+        }
+
+        .ui-text {
+          font-size: 0.9rem;
+        }
+      }
+
+      /* For larger screens (optional improvement) */
+      @media screen and (min-width: 768px) {
+        #textbox {
+          left: 10%;
+          right: 10%;
+          padding: 1.5rem;
+        }
+
+        .note {
+          left: 10%;
+        }
+      }
+
+      /* For very large screens */
+      @media screen and (min-width: 1200px) {
+        #textbox {
+          left: 15%;
+          right: 15%;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .note {
+          left: 15%;
+        }
       }
     </style>
     <div id="app">
-      <div>
-        <p class="note">Tap/Click around to move</p>
+      <div class="note">
+        <p>Tap/Click around to move</p>
+        <p style="font-size: 0.8em; margin-top: 0.5vh;">Press M to toggle music 'only on desktop'</p>
+      </div>
 
-        <div id="textbox-container" style="display: none">
-          <div id="textbox">
-            <p id="dialogue" class="ui-text"></p>
-            <div class="btn-container">
-              <button id="close" class="ui-close-btn">Close</button>
-            </div>
+      <div id="textbox-container" style="display: none">
+        <div id="textbox">
+          <p id="dialogue" class="ui-text"></p>
+          <div class="btn-container">
+            <button id="close" class="ui-close-btn">Close</button>
           </div>
         </div>
       </div>
+      
       <canvas id="game"></canvas>
     </div>
     <script type="module" src="src/main.js"></script>

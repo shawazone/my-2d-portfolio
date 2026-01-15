@@ -1,6 +1,6 @@
 
 import kaboom from "kaboom";
-import { scaleFactor } from "./constants";
+import { scaleFactor } from "./dailog";
 
 export const k = kaboom({
   global: false,
