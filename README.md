@@ -55,7 +55,7 @@ It’s a portfolio you **play**, not just read.
 
 ## 🖼️ Preview
 
-![Game Preview]("https://github.com/shawazone/my-2d-portfolio/blob/master/public/outdoor4.png")
+![Screenshot](https://github.com/shawazone/my-2d-portfolio/blob/master/public/outdoor4.png)
 
 
 
