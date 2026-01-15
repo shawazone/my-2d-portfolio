@@ -1,7 +1,7 @@
 export const scaleFactor = 4;
 
 export const dialogueData = {
-  pc: `This is my PC. I work mostly in JavaScript/TypeScript these days.`,
+  pc: `This is my PC. I work mostly in JavaScript/TypeScript these days. I like to build web apps (using MERN stack) and sometimes games. I also have experience with Python,ML, Prompt Engineering, Google Cloud, and more.`,
   "cs-degree": `This is my CS degree. I hung it on the wall because I'm proud of it. It was a very theoretical degree but I think it gave me a good foundation.`,
   "sofa-table": `That's my sofa. I like to relax here and watch YouTube. `,
 
@@ -36,7 +36,7 @@ export const dialogueData = {
 
   linkedin: `Connect with me on <a href="https://www.linkedin.com/in/mohamad-alchawa/" target="_blank">LinkedIn</a>`,
 
-  cali: `This is my Calisthenics Area, I do Calisthenics (bodyweight training) to stay fit! you can check my progress on my <a href="https://www.instagram.com/shawazone/" target="_blank">Instagram</a>, Also i created a Calisthenics Website for my team you can check it out here : <a href="https://calisthenics-app.netlify.app/" target="_blank">Calisthenics Army</a>` ,
+  cali: `This is my Calisthenics Area, I do Calisthenics (bodyweight training) to stay fit! you can check my progress on my <a href="https://www.instagram.com/shawazone/" target="_blank">Instagram</a>, Also i created a Calisthenics Website for my team you can check it out here : <a href="https://calisthenics-army.netlify.app/" target="_blank">Calisthenics Army</a>` ,
 
   mailbox: `Feel free to send me an email at <a href="mailto:mohamad.alchawwa@gmail.com">mohamad.alchawwa@gmail.com</a> or check my <a href="https://mohamad-alshawa.netlify.app/" target="_blank">Portfolio</a>`,
 };
