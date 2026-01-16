@@ -63,7 +63,7 @@ It’s a portfolio you **play**, not just read.
 
 ## 🔗 Live Demo
 
-👉 **Play Here:** [https://mohamad-alshawa-2d-portfolio.netlify.app/](LIVE_LINK_HERE)
+👉 **Play Here:** https://mohamad-alshawa-2d-portfolio.netlify.app/
 
 
 ---
