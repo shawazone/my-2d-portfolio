@@ -39,10 +39,10 @@
       }
 
       #textbox {
-        position: fixed; /* Changed from absolute to fixed */
+        position: fixed;
         left: 5%;
         right: 5%;
-        bottom: max(2vh, env(safe-area-inset-bottom) + 2vh); /* Account for safe area */
+        bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         min-height: 10vh;
         background: white;
         border-radius: 3px;
@@ -50,24 +50,49 @@
         padding: 1rem;
         display: flex;
         flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
+        justify-content: space-between;
+        align-items: stretch;
         word-spacing: 0.2rem;
         filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
         box-sizing: border-box;
-        z-index: 1000; /* Ensure it's above everything */
-        /* Prevent textbox from being too tall on small screens */
+        z-index: 1000;
         max-height: 50vh;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      .text-content {
+        flex: 1;
         overflow-y: auto;
-        margin-bottom: 10px; /* Extra space for safe area */
+        margin-bottom: 1rem;
+        max-height: calc(50vh - 80px);
+        padding-right: 5px; /* Space for scrollbar */
+      }
+
+      /* Custom scrollbar for text content */
+      .text-content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .text-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+
+      .text-content::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+
+      .text-content::-webkit-scrollbar-thumb:hover {
+        background: #555;
       }
 
       .ui-text {
         margin: 0;
         user-select: none;
         line-height: 1.2;
-        word-break: break-word; /* Prevent text overflow */
+        word-break: break-word;
       }
 
       .ui-close-btn {
@@ -79,9 +104,9 @@
         cursor: pointer;
         background-color: #f0f0f0;
         transition: background-color 0.2s ease;
-        min-height: 44px; /* Apple's minimum touch target size */
+        min-height: 44px;
         min-width: 44px;
-        touch-action: manipulation; /* Improve touch response */
+        touch-action: manipulation;
       }
 
       .ui-close-btn:hover {
@@ -90,12 +115,10 @@
 
       .btn-container {
         align-self: flex-end;
-        margin-top: 1rem;
-        /* Ensure button is always accessible */
-        position: sticky;
-        bottom: 0;
-        background: white;
+        margin-top: auto;
         padding-top: 0.5rem;
+        position: static;
+        background: white;
       }
 
       /* Pixel Art Info Button Styles */
@@ -105,7 +128,7 @@
         top: max(1vh, env(safe-area-inset-top) + 1vh);
         background-color: rgba(0, 0, 0, 0.8);
         border: 3px solid #ffffff;
-        border-radius: 0; /* Pixel art: no rounded corners */
+        border-radius: 0;
         width: 50px;
         height: 50px;
         cursor: pointer;
@@ -235,7 +258,7 @@
         top: calc(max(1vh, env(safe-area-inset-top) + 1vh) + 60px);
         background-color: rgba(0, 0, 0, 0.95);
         color: rgb(238, 238, 238);
-        border-radius: 0; /* Pixel art: no rounded corners */
+        border-radius: 0;
         padding: 1.5rem;
         width: 300px;
         max-width: 90vw;
@@ -324,7 +347,6 @@
         width: 100%;
         height: 100%;
         display: block;
-        /* Ensure game canvas respects safe areas */
         position: relative;
         z-index: 1;
         image-rendering: pixelated;
@@ -334,24 +356,19 @@
       /* iOS Safari specific fixes */
       @supports (-webkit-touch-callout: none) {
         #app {
-          /* iOS Safari specific height calculation */
           height: -webkit-fill-available;
         }
         
         #textbox {
-          /* Use fixed positioning to stay above Safari UI */
           position: fixed;
-          /* Add extra padding for Safari's bottom bar */
           padding-bottom: max(1rem, env(safe-area-inset-bottom));
         }
         
         .ui-close-btn {
-          /* Larger touch targets for iOS */
           padding: 1rem 2rem;
         }
         
         .info-button {
-          /* Larger touch target for iOS */
           width: 60px;
           height: 60px;
         }
@@ -387,6 +404,11 @@
           min-height: 8vh;
           bottom: max(1vh, env(safe-area-inset-bottom) + 1vh);
           padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+        }
+
+        .text-content {
+          margin-bottom: 0.75rem;
+          max-height: calc(50vh - 70px);
         }
 
         .info-button {
@@ -452,7 +474,10 @@
       @media screen and (max-height: 500px) and (orientation: landscape) {
         #textbox {
           max-height: 70vh;
-          overflow-y: auto;
+        }
+        
+        .text-content {
+          max-height: calc(70vh - 80px);
         }
         
         .info-panel {
@@ -474,6 +499,11 @@
           min-height: 6vh;
           bottom: max(0.5vh, env(safe-area-inset-bottom) + 0.5vh);
           padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+        }
+
+        .text-content {
+          margin-bottom: 0.5rem;
+          max-height: calc(50vh - 60px);
         }
 
         .info-button {
@@ -543,6 +573,10 @@
           bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         }
 
+        .text-content {
+          max-height: calc(50vh - 100px);
+        }
+
         .info-button {
           left: 10%;
           top: max(1vh, env(safe-area-inset-top) + 1vh);
@@ -564,6 +598,10 @@
           bottom: max(2vh, env(safe-area-inset-bottom) + 2vh);
         }
 
+        .text-content {
+          max-height: calc(50vh - 100px);
+        }
+
         .info-button {
           left: 15%;
           top: max(1vh, env(safe-area-inset-top) + 1vh);
@@ -580,6 +618,10 @@
         .info-panel {
           max-height: 70vh;
           overflow-y: auto;
+        }
+        
+        .text-content {
+          max-height: calc(70vh - 80px);
         }
       }
     </style>
@@ -623,7 +665,9 @@
       <!-- Dialogue Textbox -->
       <div id="textbox-container" style="display: none">
         <div id="textbox">
-          <p id="dialogue" class="ui-text"></p>
+          <div class="text-content">
+            <p id="dialogue" class="ui-text"></p>
+          </div>
           <div class="btn-container">
             <button id="close" class="ui-close-btn">Close</button>
           </div>
@@ -648,11 +692,6 @@
           // Update button aria-label
           const isActive = infoPanel.classList.contains('active');
           infoBtn.setAttribute('aria-label', isActive ? 'Close information panel' : 'Open information panel');
-          
-          // Play a subtle click sound if you have one
-          // if (typeof window.playSound === 'function') {
-          //   window.playSound('click');
-          // }
         });
         
         // Close info panel when clicking outside
