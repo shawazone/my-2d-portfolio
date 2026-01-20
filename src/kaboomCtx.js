@@ -1,6 +1,6 @@
 
 import kaboom from "kaboom";
-import { scaleFactor } from "./dailog";
+import { scaleFactor } from "./dialogue";
 
 export const k = kaboom({
   global: false,
